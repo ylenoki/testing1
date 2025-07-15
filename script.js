@@ -12,12 +12,14 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth();
-const db = getFirestore();
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let currentUser = null;
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    window.currentUser = user;
+    currentUser = user;
     const userRef = doc(db, "users", user.uid);
     const snapshot = await getDoc(userRef);
     if (snapshot.exists()) {
@@ -36,28 +38,8 @@ function getRandomStat() {
 window.generateTraits = (select, breed) => {
   const gender = select.value;
   if (!gender) return;
-  const traitsDiv = document.getElementById(`traits-${breed}`);
-  traitsDiv.innerHTML = `
-    🧠 Intelligence: ${getRandomStat()}<br>
-    🐾 Playfulness: ${getRandomStat()}<br>
-    ❤️ Affection: ${getRandomStat()}<br>
-    ⚡ Energy: ${getRandomStat()}<br>
-    🛡️ Loyalty: ${getRandomStat()}
-  `;
-};
 
-window.adoptPet = async (breed) => {
-  const genderSelect = document.querySelector(`select[onchange*="${breed}"]`);
-  const gender = genderSelect.value;
-  if (!gender) {
-    alert("Please choose a gender before adopting!");
-    return;
-  }
-
-  const petData = {
-    breed: breed,
-    gender: gender,
-    image: `${breed}.gif`,
+  const traits = {
     intelligence: getRandomStat(),
     playfulness: getRandomStat(),
     affection: getRandomStat(),
@@ -65,12 +47,47 @@ window.adoptPet = async (breed) => {
     loyalty: getRandomStat()
   };
 
-  if (window.currentUser) {
-    const userRef = doc(db, "users", window.currentUser.uid);
+  const traitDiv = document.getElementById(`traits-${breed}`);
+  traitDiv.innerHTML = `
+    🧠 Intelligence: ${traits.intelligence}<br>
+    🐾 Playfulness: ${traits.playfulness}<br>
+    ❤️ Affection: ${traits.affection}<br>
+    ⚡ Energy: ${traits.energy}<br>
+    🛡️ Loyalty: ${traits.loyalty}
+  `;
+
+  select.setAttribute("data-traits", JSON.stringify(traits));
+};
+
+window.adoptPet = async (breed) => {
+  const select = document.querySelector(`select[onchange*="${breed}"]`);
+  const gender = select.value;
+  const traits = JSON.parse(select.getAttribute("data-traits") || "{}");
+
+  if (!gender) {
+    alert("Please choose a gender before adopting!");
+    return;
+  }
+
+  if (!traits.intelligence) {
+    alert("Please select a gender to generate traits first!");
+    return;
+  }
+
+  const petData = {
+    breed,
+    gender,
+    image: `${breed}.gif`,
+    ...traits
+  };
+
+  if (currentUser) {
+    const userRef = doc(db, "users", currentUser.uid);
     await setDoc(userRef, { adoptedPet: petData });
   }
 
   localStorage.setItem("adoptedPet", JSON.stringify(petData));
   window.location.href = "adopted.html";
 };
+
 
