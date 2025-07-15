@@ -9,15 +9,44 @@
   <h1>Your Adopted Pet</h1>
   <div id="petProfile" class="dog-card"></div>
 
-  <script>
-    const pet = JSON.parse(localStorage.getItem("adoptedPet"));
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDO8K1h8JwzZBVMtHpVnNOxBotQllmgC2k",
+      authDomain: "test-8f4a9.firebaseapp.com",
+      projectId: "test-8f4a9",
+      storageBucket: "test-8f4a9.firebasestorage.app",
+      messagingSenderId: "1926207768",
+      appId: "1:1926207768:web:8b41686fee2d4eeb87266d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
     const container = document.getElementById("petProfile");
 
-    if (!pet) {
-      container.innerHTML = "<p>No pet adopted yet.</p>";
-    } else {
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const userRef = doc(db, "users", user.uid);
+        const snapshot = await getDoc(userRef);
+
+        if (snapshot.exists() && snapshot.data().adoptedPet) {
+          const pet = snapshot.data().adoptedPet;
+          renderPet(pet);
+        } else {
+          container.innerHTML = "<p>No pet adopted yet.</p>";
+        }
+      } else {
+        container.innerHTML = "<p>Please sign in to view your adopted pet.</p>";
+      }
+    });
+
+    function renderPet(pet) {
       const capitalizedBreed = pet.breed.charAt(0).toUpperCase() + pet.breed.slice(1);
-      container.innerHTML = `
+      document.getElementById("petProfile").innerHTML = `
         <img src="${pet.image}" alt="${capitalizedBreed}" class="dog-img">
         <h2>${capitalizedBreed} ${pet.gender}</h2>
         <p>🧠 <strong>Intelligence:</strong> ${pet.intelligence}</p>
@@ -25,10 +54,13 @@
         <p>❤️ <strong>Affection:</strong> ${pet.affection}</p>
         <p>⚡ <strong>Energy:</strong> ${pet.energy}</p>
         <p>🛡️ <strong>Loyalty:</strong> ${pet.loyalty}</p>
+        <br>
+        <a href="index.html"><button>🏠 Back to Home</button></a>
       `;
     }
   </script>
 </body>
 </html>
+
 
 
