@@ -1,17 +1,25 @@
 function getRandomStat() {
-  return Math.floor(Math.random() * 51) + 50; // 50–100
+  return Math.floor(Math.random() * 100) + 1;
 }
 
-function generateTraits(selectEl, id) {
-  if (!selectEl.value) return;
-  const gender = selectEl.value;
-  const traits = `
-    <strong>Gender:</strong> ${gender}<br>
-    🧠 Intelligence: ${getRandomStat()}<br>
-    🐾 Playfulness: ${getRandomStat()}<br>
-    ❤️ Affection: ${getRandomStat()}<br>
-    ⚡ Energy: ${getRandomStat()}<br>
-    🛡️ Loyalty: ${getRandomStat()}
-  `;
-  document.getElementById("traits-" + id).innerHTML = traits;
+function adoptPet(breed) {
+  const genderSelect = document.querySelector(`select[onchange*="${breed}"]`);
+  const gender = genderSelect.value;
+  if (!gender) {
+    alert("Please choose a gender before adopting!");
+    return;
+  }
+
+  const petData = {
+    breed: breed,
+    gender: gender,
+    intelligence: getRandomStat(),
+    playfulness: getRandomStat(),
+    affection: getRandomStat(),
+    energy: getRandomStat(),
+    loyalty: getRandomStat()
+  };
+
+  localStorage.setItem("adoptedPet", JSON.stringify(petData));
+  window.location.href = "adopted.html"; // ✅ this takes you to the next page
 }
