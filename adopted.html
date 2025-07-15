@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Adopted Pet</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Your Adopted Pet</h1>
+  <div id="petProfile" class="dog-card"></div>
+
+  <script>
+    const pet = JSON.parse(localStorage.getItem("adoptedPet"));
+    if (!pet) {
+      document.getElementById("petProfile").innerHTML = "<p>No pet adopted yet.</p>";
+    } else {
+      document.getElementById("petProfile").innerHTML = `
+        <img src="${pet.breed}.gif" alt="${pet.breed}" class="dog-img">
+        <h2>${pet.breed.charAt(0).toUpperCase() + pet.breed.slice(1)} ${pet.gender}</h2>
+        <p>🧠 Intelligence: ${pet.intelligence}</p>
+        <p>🐾 Playfulness: ${pet.playfulness}</p>
+        <p>❤️ Affection: ${pet.affection}</p>
+        <p>⚡ Energy: ${pet.energy}</p>
+        <p>🛡️ Loyalty: ${pet.loyalty}</p>
+      `;
+    }
+  </script>
+</body>
+</html>
