@@ -9,50 +9,48 @@
   <h1>Welcome to NokiPets</h1>
   <p>Select your favorite puppy and discover their unique traits!</p>
 
- <div class="dog-grid">
+  <div id="loginStatus"></div>
 
-  <div class="dog-card">
-    <img src="pomeranian.gif" alt="Pomeranian" class="dog-img">
-    <h2>Pomeranian</h2>
-    <p>Choose Gender:</p>
-    <select class="gender-select" onchange="generateTraits(this, 'pomeranian')">
-      <option value="">Select</option>
-      <option value="♀">Female</option>
-      <option value="♂">Male</option>
-    </select>
-    <div class="traits" id="traits-pomeranian"></div>
-    <button onclick="adoptPet('pomeranian')">Adopt</button>
+  <div class="dog-grid">
+    <div class="dog-card">
+      <img src="pomeranian.gif" alt="Pomeranian" class="dog-img">
+      <h2>Pomeranian</h2>
+      <p>Choose Gender:</p>
+      <select class="gender-select" onchange="generateTraits(this, 'pomeranian')">
+        <option value="">Select</option>
+        <option value="♀">Female</option>
+        <option value="♂">Male</option>
+      </select>
+      <div class="traits" id="traits-pomeranian"></div>
+      <button onclick="adoptPet('pomeranian')">Adopt</button>
+    </div>
+
+    <div class="dog-card">
+      <img src="shiba.gif" alt="Shiba Inu" class="dog-img">
+      <h2>Shiba Inu</h2>
+      <p>Choose Gender:</p>
+      <select class="gender-select" onchange="generateTraits(this, 'shiba')">
+        <option value="">Select</option>
+        <option value="♀">Female</option>
+        <option value="♂">Male</option>
+      </select>
+      <div class="traits" id="traits-shiba"></div>
+      <button onclick="adoptPet('shiba')">Adopt</button>
+    </div>
+
+    <div class="dog-card">
+      <img src="husky.gif" alt="Husky" class="dog-img">
+      <h2>Husky</h2>
+      <p>Choose Gender:</p>
+      <select class="gender-select" onchange="generateTraits(this, 'husky')">
+        <option value="">Select</option>
+        <option value="♀">Female</option>
+        <option value="♂">Male</option>
+      </select>
+      <div class="traits" id="traits-husky"></div>
+      <button onclick="adoptPet('husky')">Adopt</button>
+    </div>
   </div>
-
-  <div class="dog-card">
-    <img src="shiba.gif" alt="Shiba Inu" class="dog-img">
-    <h2>Shiba Inu</h2>
-    <p>Choose Gender:</p>
-    <select class="gender-select" onchange="generateTraits(this, 'shiba')">
-      <option value="">Select</option>
-      <option value="♀">Female</option>
-      <option value="♂">Male</option>
-    </select>
-    <div class="traits" id="traits-shiba"></div>
-    <button onclick="adoptPet('shiba')">Adopt</button>
-  </div>
-
-  <div class="dog-card">
-    <img src="husky.gif" alt="Husky" class="dog-img">
-    <h2>Husky</h2>
-    <p>Choose Gender:</p>
-    <select class="gender-select" onchange="generateTraits(this, 'husky')">
-      <option value="">Select</option>
-      <option value="♀">Female</option>
-      <option value="♂">Male</option>
-    </select>
-    <div class="traits" id="traits-husky"></div>
-    <button onclick="adoptPet('husky')">Adopt</button>
-  </div>
-
-</div>
-
-<script src="script.js"></script>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -69,23 +67,98 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+    const auth = getAuth();
+    const db = getFirestore();
     const provider = new GoogleAuthProvider();
-    const db = getFirestore(app);
+    let currentUser = null;
 
-    const loginButton = document.createElement('button');
-    loginButton.id = "loginBtn";
+    const loginButton = document.createElement("button");
     loginButton.textContent = "Sign in with Google";
-    document.body.appendChild(loginButton);
+    document.getElementById("loginStatus").appendChild(loginButton);
 
     loginButton.addEventListener("click", () => {
       signInWithPopup(auth, provider)
-        .then((result) => {
-          const user = result.user;
-          alert(`Welcome, ${user.displayName}`);
+        .then(result => {
+          currentUser = result.user;
+          alert(`Welcome, ${currentUser.displayName}`);
         })
         .catch(console.error);
     });
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        currentUser = user;
+        const userRef = doc(db, "users", user.uid);
+        const snapshot = await getDoc(userRef);
+        if (snapshot.exists()) {
+          const data = snapshot.data();
+          if (data.adoptedPet) {
+            alert(`You already adopted a ${data.adoptedPet.breed} (${data.adoptedPet.gender})`);
+          }
+        }
+      }
+    });
+
+    function getRandomStat() {
+      return Math.floor(Math.random() * 100) + 1;
+    }
+
+    function generateTraits(select, breed) {
+      const gender = select.value;
+      if (!gender) return;
+
+      const traits = {
+        intelligence: getRandomStat(),
+        playfulness: getRandomStat(),
+        affection: getRandomStat(),
+        energy: getRandomStat(),
+        loyalty: getRandomStat()
+      };
+
+      const traitDiv = document.getElementById(`traits-${breed}`);
+      traitDiv.innerHTML = `
+        🧠 Intelligence: ${traits.intelligence}<br>
+        🐾 Playfulness: ${traits.playfulness}<br>
+        ❤️ Affection: ${traits.affection}<br>
+        ⚡ Energy: ${traits.energy}<br>
+        🛡️ Loyalty: ${traits.loyalty}
+      `;
+
+      select.setAttribute("data-traits", JSON.stringify(traits));
+    }
+
+    async function adoptPet(breed) {
+      const select = document.querySelector(`select[onchange*="${breed}"]`);
+      const gender = select.value;
+      if (!gender) {
+        alert("Please choose a gender before adopting!");
+        return;
+      }
+
+      const traits = JSON.parse(select.getAttribute("data-traits") || "{}");
+      if (!traits.intelligence) {
+        alert("Please select a gender to generate traits first!");
+        return;
+      }
+
+      const petData = {
+        breed,
+        gender,
+        ...traits
+      };
+
+      if (currentUser) {
+        const userRef = doc(db, "users", currentUser.uid);
+        await setDoc(userRef, { adoptedPet: petData });
+      }
+
+      localStorage.setItem("adoptedPet", JSON.stringify(petData));
+      window.location.href = "adopted.html";
+    }
+
+    window.generateTraits = generateTraits;
+    window.adoptPet = adoptPet;
   </script>
 </body>
 </html>
+
