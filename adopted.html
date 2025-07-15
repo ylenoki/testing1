@@ -11,11 +11,13 @@
 
   <script>
     const pet = JSON.parse(localStorage.getItem("adoptedPet"));
+    const container = document.getElementById("petProfile");
+
     if (!pet) {
-      document.getElementById("petProfile").innerHTML = "<p>No pet adopted yet.</p>";
+      container.innerHTML = "<p>No pet adopted yet.</p>";
     } else {
-      document.getElementById("petProfile").innerHTML = `
-        <img src="${pet.breed}.gif" alt="${pet.breed}" class="dog-img">
+      container.innerHTML = `
+        <img src="${pet.image}" alt="${pet.breed}" class="dog-img">
         <h2>${pet.breed.charAt(0).toUpperCase() + pet.breed.slice(1)} ${pet.gender}</h2>
         <p>🧠 Intelligence: ${pet.intelligence}</p>
         <p>🐾 Playfulness: ${pet.playfulness}</p>
@@ -27,3 +29,4 @@
   </script>
 </body>
 </html>
+
