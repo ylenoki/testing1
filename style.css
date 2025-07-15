@@ -1,0 +1,59 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to right, #fff9f3, #ffe0e9);
+  margin: 0;
+  padding: 20px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 2.5rem;
+  color: #5c3c92;
+  margin-bottom: 0;
+}
+
+p {
+  color: #444;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+
+.dog-grid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+  gap: 1.5rem;
+}
+
+.dog-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+  padding: 20px;
+  width: 250px;
+  transition: transform 0.2s ease;
+}
+
+.dog-card:hover {
+  transform: translateY(-5px);
+}
+
+.dog-img {
+  width: 100%;
+  border-radius: 12px;
+}
+
+.gender-select {
+  margin-top: 10px;
+  font-size: 1rem;
+}
+
+.traits {
+  text-align: left;
+  margin-top: 15px;
+  background: #faf0ff;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+}
