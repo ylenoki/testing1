@@ -9,49 +9,50 @@
   <h1>Welcome to NokiPets</h1>
   <p>Select your favorite puppy and discover their unique traits!</p>
 
-  <div class="dog-grid">
-    <div class="dog-card">
-      <img src="pomeranian.gif" alt="Pomeranian" class="dog-img">
-      <h2>Pomeranian</h2>
-      <p>Choose Gender:</p>
-      <select class="gender-select" onchange="generateTraits(this, 'pomeranian')">
-        <option value="">Select</option>
-        <option value="♀">Female</option>
-        <option value="♂">Male</option>
-      </select>
-      <div class="traits" id="traits-pomeranian"></div>
-      <button onclick="adoptPet('pomeranian')">Adopt</button>
-    </div>
+ <div class="dog-grid">
 
-    <div class="dog-card">
-      <img src="shiba.gif" alt="Shiba Inu" class="dog-img">
-      <h2>Shiba Inu</h2>
-      <p>Choose Gender:</p>
-      <select class="gender-select" onchange="generateTraits(this, 'shiba')">
-        <option value="">Select</option>
-        <option value="♀">Female</option>
-        <option value="♂">Male</option>
-      </select>
-      <div class="traits" id="traits-shiba"></div>
-      <button onclick="adoptPet('shiba')">Adopt</button>
-    </div>
-
-   <div class="dog-grid">
-    <div class="dog-card">
-      <img src="husky.gif" alt="Husky" class="dog-img">
-      <h2>Husky</h2>
-      <p>Choose Gender:</p>
-      <select class="gender-select" onchange="generateTraits(this, 'husky')">
-        <option value="">Select</option>
-        <option value="♀">Female</option>
-        <option value="♂">Male</option>
-      </select>
-      <div class="traits" id="traits-husky"></div>
-      <button onclick="adoptPet('husky')">Adopt</button>
-    </div>
+  <div class="dog-card">
+    <img src="pomeranian.gif" alt="Pomeranian" class="dog-img">
+    <h2>Pomeranian</h2>
+    <p>Choose Gender:</p>
+    <select class="gender-select" onchange="generateTraits(this, 'pomeranian')">
+      <option value="">Select</option>
+      <option value="♀">Female</option>
+      <option value="♂">Male</option>
+    </select>
+    <div class="traits" id="traits-pomeranian"></div>
+    <button onclick="adoptPet('pomeranian')">Adopt</button>
   </div>
 
-  <script src="script.js"></script>
+  <div class="dog-card">
+    <img src="shiba.gif" alt="Shiba Inu" class="dog-img">
+    <h2>Shiba Inu</h2>
+    <p>Choose Gender:</p>
+    <select class="gender-select" onchange="generateTraits(this, 'shiba')">
+      <option value="">Select</option>
+      <option value="♀">Female</option>
+      <option value="♂">Male</option>
+    </select>
+    <div class="traits" id="traits-shiba"></div>
+    <button onclick="adoptPet('shiba')">Adopt</button>
+  </div>
+
+  <div class="dog-card">
+    <img src="husky.gif" alt="Husky" class="dog-img">
+    <h2>Husky</h2>
+    <p>Choose Gender:</p>
+    <select class="gender-select" onchange="generateTraits(this, 'husky')">
+      <option value="">Select</option>
+      <option value="♀">Female</option>
+      <option value="♂">Male</option>
+    </select>
+    <div class="traits" id="traits-husky"></div>
+    <button onclick="adoptPet('husky')">Adopt</button>
+  </div>
+
+</div>
+
+<script src="script.js"></script>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
