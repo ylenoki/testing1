@@ -3,12 +3,12 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyDO8K1h8JwzZBVMtHpVnNOxBotQllmgC2k",
+  authDomain: "test-8f4a9.firebaseapp.com",
+  projectId: "test-8f4a9",
+  storageBucket: "test-8f4a9.firebasestorage.app",
+  messagingSenderId: "1926207768",
+  appId: "1:1926207768:web:8b41686fee2d4eeb87266d"
 };
 
 const app = initializeApp(firebaseConfig);
