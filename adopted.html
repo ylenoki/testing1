@@ -16,17 +16,19 @@
     if (!pet) {
       container.innerHTML = "<p>No pet adopted yet.</p>";
     } else {
+      const capitalizedBreed = pet.breed.charAt(0).toUpperCase() + pet.breed.slice(1);
       container.innerHTML = `
-        <img src="${pet.image}" alt="${pet.breed}" class="dog-img">
-        <h2>${pet.breed.charAt(0).toUpperCase() + pet.breed.slice(1)} ${pet.gender}</h2>
-        <p>🧠 Intelligence: ${pet.intelligence}</p>
-        <p>🐾 Playfulness: ${pet.playfulness}</p>
-        <p>❤️ Affection: ${pet.affection}</p>
-        <p>⚡ Energy: ${pet.energy}</p>
-        <p>🛡️ Loyalty: ${pet.loyalty}</p>
+        <img src="${pet.image}" alt="${capitalizedBreed}" class="dog-img">
+        <h2>${capitalizedBreed} ${pet.gender}</h2>
+        <p>🧠 <strong>Intelligence:</strong> ${pet.intelligence}</p>
+        <p>🐾 <strong>Playfulness:</strong> ${pet.playfulness}</p>
+        <p>❤️ <strong>Affection:</strong> ${pet.affection}</p>
+        <p>⚡ <strong>Energy:</strong> ${pet.energy}</p>
+        <p>🛡️ <strong>Loyalty:</strong> ${pet.loyalty}</p>
       `;
     }
   </script>
 </body>
 </html>
+
 
